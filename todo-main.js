@@ -14,8 +14,12 @@ Start off by adding the comment for each of the these.
 Task: add another option called "clear todo list" that removes all tasks from the todo list
 */
 
+/* Greysons's comments: Hey Nancy, nice clear all feature but this project does not indicate weather items are Complete or Incomplete as showcased in the github instructions. Please add that feature for full credit!
+ */
+
 let todo_list = []
     welcomeMessage();//welcome user, only runs once
+let statusArray = [];    
 
 while(true){
 
@@ -30,13 +34,30 @@ while(true){
     if(opt === 1){
         const newItem = addTodoItem();
         todo_list.push(newItem);
+        statusArray.push(false);
 
-    }else if (opt === 2){
-        //get user input
-        const index = completeItem();
-        //remove item from list
-        todo_list.splice(index - 1,1);
-       //how do we complete the item
+    }else if(opt === 2){
+        if(todo_list.length !== 0){  //from Greyson video 10/5/22
+            console.log(`\n~ Completing a to-do item ~`);
+            console.log(`Which to-do item would like to complete?`);
+            displayTodoList(todo_list);
+            //complete an item
+
+            let newStatus = Number(prompt('> '));
+
+            //console.log("newStatus check: " + newStatus);
+            //console.log("type check: " + typeof newStatus);
+            while(isNaN(newStatus) || newStatus > statusArray.length || newStatus < 1){
+                
+                console.log('Please input a number that corresponds to an item in the list: ');
+                newStatus = Number(prompt('> '));
+            }
+
+            statusArray[newStatus-1] = true;
+            } else {
+                console.log("Please add something to your to-do list before trying to complete an item");
+            }
+
     }else if (opt ===3){
         clearTodoList();
         
@@ -57,6 +78,7 @@ function addTodoItem(){
     console.log("What is this to-do item called?");
     const item = prompt(">");
     return item;
+    //console.log("[Incomplete] " + item);// code I added to mark item is incomplete, per Grayson's comments
 
 }   
 function completeItem(){
@@ -87,7 +109,13 @@ if (todo.length == 0){
 
     //print each entry in the todo list to the user
     for (let i =0; i < todo.length; i++){
-        console.log(`${i + 1}. ${todo[i]}`);
+        let status = "";
+
+        if(statusArray[i] === false){
+            status = "[incomplete]"
+        }else if(statusArray[i] === true){
+            status = '[complete]'
+        } console.log(`${i + 1}. ${status} ${todo[i]}`);
     }
 
 console.log("\n");
@@ -105,4 +133,3 @@ function selectOption(){
     const option = Number(prompt(">"));
     return option;
 }
-
